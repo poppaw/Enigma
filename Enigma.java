@@ -1,5 +1,5 @@
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
+import java.io.*;
 
 public class Enigma {
 
@@ -50,22 +50,30 @@ public class Enigma {
     }
   }
 
-  public static void ColumnarTranspositionEncipher(String text, String key, String pad_character) {
+  public static void ColumnarTransposition(String text, String key, String method){
+    if (method.equals("e")) {
+      System.out.println(CT_Encipher(text, key, "x"));
+    } else if (method.equals("d")) {
+      System.out.println(CT_Decipher(text, key));
+    }
+  }
+
+  public static String CT_Encipher(String text, String key, String pad) {
     text = text.replaceAll("\\s+",""); //remove whitespaces
     Integer text_len = text.length();
     Integer key_len = key.length();
 
-    Integer pad = key_len - (text_len%key_len);//get the quantity of pads to use
-    for (int i=0; i<pad; i++) {
-      text += pad_character;//add pad do text
+    Integer pad_number = key_len - (text_len%key_len);//get the quantity of pads to use
+    for (int i=0; i<pad_number; i++) {
+      text += pad;//add pad do text
     }
-    Integer len_text_pad = text.length();//get the text length after adding pads
-    Integer rows_quantity = len_text_pad/key_len;//get the number of rows to split the text
+    Integer len_padtext = text.length();//get the text length after adding pads
+    Integer rows_number = len_padtext/key_len;//get the number of rows to split the text
     Integer start = 0;
     Integer end = key_len;
     //split text to rows
     List<String> rows = new ArrayList<String>();
-    for (int i=0; i<rows_quantity; i++) {
+    for (int i=0; i<rows_number; i++) {
       String row = text.substring(start,end);
       rows.add(row);
       start += key_len;
@@ -77,8 +85,8 @@ public class Enigma {
 
     //use <key> and <sorted key> to find new indexes for row characters
     List<Integer> list_of_index = new ArrayList<Integer>();
-    for (char ch: sorted_key) {
-      Integer index = key.indexOf(ch);
+    for (char character: sorted_key) {
+      Integer index = key.indexOf(character);
       list_of_index.add(index);
     }
     //use list_of_index to sort every row
@@ -91,7 +99,7 @@ public class Enigma {
       sorted_rows.add(sorted_row);
     }
 
-    //join every row to get encrypted text
+    //concatenate every row to get encrypted text
     //encrypted text takes indexed character from every row
     String encryption = "";
     Integer index = 0;
@@ -101,5 +109,69 @@ public class Enigma {
       }
       index += 1;
     }
+    return encryption;
+  }
+
+
+
+  public static String CT_Decipher(String text, String key) {
+    Integer text_len = text.length();
+    Integer key_len = key.length();
+    Integer row_len = text_len/key_len;
+    Integer index;
+
+    //get a list of rows
+    ArrayList<String> rows = new ArrayList<String>();
+    Integer start = 0;
+    Integer end = row_len;
+
+    for (int i=0; i<key_len; i++) {
+      rows.add(text.substring(start,end));
+      start += row_len;
+      end += row_len;
+    }
+
+    //reorder every row
+    //take character at specific index of every row, concatenate them to string
+    ArrayList<String> reordered_rows = new ArrayList<String>();
+    index = 0;
+    while (index < row_len) {
+      String reordered_row = "";
+      for (String row : rows) {
+        reordered_row += row.charAt(index);
+      }
+      index += 1;
+      //add string to list
+      reordered_rows.add(reordered_row);
+    }
+
+    char[] sorted_key = key.toCharArray();
+    Arrays.sort(sorted_key);
+    //use <key> and <sorted key> to find new indexes for row characters
+    List<Integer> list_of_index = new ArrayList<Integer>();
+    for (char character: key.toCharArray()) {
+      index = new String(sorted_key).indexOf(character);
+      list_of_index.add(index);
+    }
+
+    //decrypt every reordered_row
+    //take character at specific index of every row, concatenate them to string, add string to list
+    ArrayList<String> decrypted_rows = new ArrayList<String>();
+      for (String row : reordered_rows) {
+        String decrypted_row = "";
+        for (int element : list_of_index) {
+          decrypted_row += row.charAt(element);
+        }
+        decrypted_rows.add(decrypted_row);
+      }
+
+    //concatenate every row to get encrypted text
+    //encrypted text takes indexed character from every row
+    String decryption = "";
+    for (String row : decrypted_rows) {
+      decryption += row;
+    }
+
+    return decryption;
   }
 }
