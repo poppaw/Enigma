@@ -50,9 +50,56 @@ public class Enigma {
     }
   }
 
+  public static void ColumnarTranspositionEncipher(String text, String key, String pad_character) {
+    text = text.replaceAll("\\s+",""); //remove whitespaces
+    Integer text_len = text.length();
+    Integer key_len = key.length();
 
+    Integer pad = key_len - (text_len%key_len);//get the quantity of pads to use
+    for (int i=0; i<pad; i++) {
+      text += pad_character;//add pad do text
+    }
+    Integer len_text_pad = text.length();//get the text length after adding pads
+    Integer rows_quantity = len_text_pad/key_len;//get the number of rows to split the text
+    Integer start = 0;
+    Integer end = key_len;
+    //split text to rows
+    List<String> rows = new ArrayList<String>();
+    for (int i=0; i<rows_quantity; i++) {
+      String row = text.substring(start,end);
+      rows.add(row);
+      start += key_len;
+      end += key_len;
+    }
 
+    char[] sorted_key = key.toCharArray();
+    Arrays.sort(sorted_key);
 
+    //use <key> and <sorted key> to find new indexes for row characters
+    List<Integer> list_of_index = new ArrayList<Integer>();
+    for (char ch: sorted_key) {
+      Integer index = key.indexOf(ch);
+      list_of_index.add(index);
+    }
+    //use list_of_index to sort every row
+    ArrayList<String> sorted_rows = new ArrayList<String>();
+    for (String row : rows) {
+      String sorted_row = "";
+      for (int index : list_of_index) {
+        sorted_row += row.charAt(index);
+      }
+      sorted_rows.add(sorted_row);
+    }
 
-
+    //join every row to get encrypted text
+    //encrypted text takes indexed character from every row
+    String encryption = "";
+    Integer index = 0;
+    while (index < key_len) {
+      for (String row : sorted_rows) {
+        encryption += row.charAt(index);
+      }
+      index += 1;
+    }
+  }
 }
