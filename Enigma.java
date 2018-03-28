@@ -1,12 +1,49 @@
 import java.util.*;
 import java.io.*;
 
+
+// write to console: method(-e or -d), cipher name (shortcuts), key (if required)
+
 public class Enigma {
 
   public static void main(String[] args) {
+    String standard_input = "lrxholloxewd";
 
-    System.out.println(ColumnarTransposition("defendtheeastwallofthecastlexx", "german", "e"));
-    System.out.println(AtbashCipher("ZGGZXP ZG WZDM", "d"));
+    try {
+      int args_length = args.length;
+      String method = args[0].toLowerCase();
+
+      if (args_length == 1) {
+        if (method.equals("-l")) {
+          print_menu();
+        }
+      } else if (args_length == 2) {
+          String cipher_name = args[1].toLowerCase();
+          if (cipher_name.equals("ac")) {
+            System.out.println(AtbashCipher(standard_input, method));
+          }
+      } else if (args_length == 3) {
+          String cipher_name = args[1].toLowerCase();
+          String key = args[2].toLowerCase();
+          if (cipher_name.equals("ctc")) {
+            System.out.println(ColumnarTransposition(standard_input, method, key));
+          }
+        }
+    } catch (IllegalArgumentException e) {
+      System.out.println("Wrong arguments!");
+      e.printStackTrace();
+    }
+  }
+
+
+  public static void print_menu() {
+    ArrayList<String> menu = new ArrayList<String>();
+    menu.add("AtbashCipher (AC)");
+    menu.add("ColumnarTranspositionCipher (CTC key)");
+    Integer index = 1;
+    for (String cipher : menu) {
+      System.out.println(index + ") " + cipher);
+    }
   }
 
 
@@ -16,7 +53,7 @@ public class Enigma {
       String alphabet = "abcdefghijklmnopqrstuvwxyz";
       String alphabet_reversed = "zyxwvutsrqponmlkjihgfedcba";
 
-      if (method.equals("e") | method.equals("d")) {
+      if (method.equals("-e") | method.equals("-d")) {
         for (char character: text.toCharArray()) {
           if (character == ' ') {
             cipher += ' ';
@@ -32,12 +69,13 @@ public class Enigma {
 
 
 
-  public static String ColumnarTransposition(String input, String key, String method){
+  public static String ColumnarTransposition(String input, String method, String key) {
+    //key - the word is to be shorter than the encrypted text, without repeating characters
     String text = input.toLowerCase();
     String result = null;
-    if (method.equals("e")) {
+    if (method.equals("-e")) {
       result =  CT_Encipher(text, key, "x");
-    } else if (method.equals("d")) {
+    } else if (method.equals("-d")) {
       result =  CT_Decipher(text, key);
     }
     return result;
