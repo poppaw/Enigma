@@ -5,58 +5,45 @@ public class Enigma {
 
   public static void main(String[] args) {
 
-
-    if (args[0].equals("l")) {
-      print_menu();
-    }
+    System.out.println(ColumnarTransposition("defendtheeastwallofthecastlexx", "german", "e"));
+    System.out.println(AtbashCipher("ZGGZXP ZG WZDM", "d"));
   }
 
-  public static void print_menu() {
-    ArrayList<String> menu = new ArrayList<String>();
-    menu.add("Affine");
-    menu.add("Columnar Transposition Cipher");
-    Integer index = 1;
-    for (String cipher : menu) {
-      System.out.println(index + ") " + cipher);
-    }
-  }
 
-  public static void choose_cipher() {
-    System.out.println("Choose the cipher: ");
+  public static String AtbashCipher(String input, String method) {
+      String text = input.toLowerCase();
+      String cipher = "";
+      String alphabet = "abcdefghijklmnopqrstuvwxyz";
+      String alphabet_reversed = "zyxwvutsrqponmlkjihgfedcba";
 
-  }
-
-  public static void affine(String text, String mode, ArrayList<Integer>key) {
-    text = text.replaceAll("\\s+","");
-    List<Character> cipher_result = new ArrayList<Character>();
-    String alphabet = "abcdefghijklmnopqrstuvwxyz";
-    Integer a = key.get(0);
-    Integer b = key.get(1);
-    for (Character ch: text.toCharArray()) {
-      if (mode.equals("e")) {
-        Integer x = alphabet.indexOf(ch);
-        Integer c = a*x + b;
-        Character encipher_char = alphabet.charAt(c%26);
-        cipher_result.add(encipher_char);
-      } else if (mode.equals("d")) {
-        Integer x = alphabet.indexOf(ch);
-        Integer c = 15*(x - 5);
-        Character decipher_char = alphabet.charAt(c%26);
-        cipher_result.add(decipher_char);
+      if (method.equals("e") | method.equals("d")) {
+        for (char character: text.toCharArray()) {
+          if (character == ' ') {
+            cipher += ' ';
+          } else {
+            int index = alphabet.indexOf(character);
+            character = alphabet_reversed.charAt(index);
+            cipher += character;
+          }
+        }
       }
+      return cipher;
     }
-    for (Character element : cipher_result) {
-      System.out.print(element);
+
+
+
+  public static String ColumnarTransposition(String input, String key, String method){
+    String text = input.toLowerCase();
+    String result = null;
+    if (method.equals("e")) {
+      result =  CT_Encipher(text, key, "x");
+    } else if (method.equals("d")) {
+      result =  CT_Decipher(text, key);
     }
+    return result;
   }
 
-  public static void ColumnarTransposition(String text, String key, String method){
-    if (method.equals("e")) {
-      System.out.println(CT_Encipher(text, key, "x"));
-    } else if (method.equals("d")) {
-      System.out.println(CT_Decipher(text, key));
-    }
-  }
+
 
   public static String CT_Encipher(String text, String key, String pad) {
     text = text.replaceAll("\\s+",""); //remove whitespaces
@@ -82,19 +69,20 @@ public class Enigma {
 
     char[] sorted_key = key.toCharArray();
     Arrays.sort(sorted_key);
+    Integer index;
 
     //use <key> and <sorted key> to find new indexes for row characters
     List<Integer> list_of_index = new ArrayList<Integer>();
     for (char character: sorted_key) {
-      Integer index = key.indexOf(character);
+      index = key.indexOf(character);
       list_of_index.add(index);
     }
     //use list_of_index to sort every row
     ArrayList<String> sorted_rows = new ArrayList<String>();
     for (String row : rows) {
       String sorted_row = "";
-      for (int index : list_of_index) {
-        sorted_row += row.charAt(index);
+      for (int element : list_of_index) {
+        sorted_row += row.charAt(element);
       }
       sorted_rows.add(sorted_row);
     }
@@ -102,7 +90,7 @@ public class Enigma {
     //concatenate every row to get encrypted text
     //encrypted text takes indexed character from every row
     String encryption = "";
-    Integer index = 0;
+    index = 0;
     while (index < key_len) {
       for (String row : sorted_rows) {
         encryption += row.charAt(index);
@@ -118,7 +106,6 @@ public class Enigma {
     Integer text_len = text.length();
     Integer key_len = key.length();
     Integer row_len = text_len/key_len;
-    Integer index;
 
     //get a list of rows
     ArrayList<String> rows = new ArrayList<String>();
@@ -133,6 +120,7 @@ public class Enigma {
 
     //reorder every row
     //take character at specific index of every row, concatenate them to string
+    Integer index;
     ArrayList<String> reordered_rows = new ArrayList<String>();
     index = 0;
     while (index < row_len) {
@@ -171,7 +159,6 @@ public class Enigma {
     for (String row : decrypted_rows) {
       decryption += row;
     }
-
     return decryption;
   }
 }
