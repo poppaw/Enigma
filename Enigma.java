@@ -1,5 +1,6 @@
 import java.util.*;
 import java.io.*;
+import static java.lang.System.out; // in order not to writ System all the time
 
 
 // write to console: method(-e or -d), cipher name (shortcuts), key (if required)
@@ -7,7 +8,7 @@ import java.io.*;
 public class Enigma {
 
   public static void main(String[] args) {
-    String standard_input = "lrxholloxewd";
+    String standard_input = "ABCDWKLMNXYZ abcdklmnwxyz";
 
     try {
       int args_length = args.length;
@@ -17,7 +18,7 @@ public class Enigma {
         if (method.equals("-l")) {
           print_menu();
         }
-      } else if (args_length == 2) {
+      } else if (args_length == 2) {//sugeruję stawiać else w tej samej linii co if poniżej klamry zamykającej ifa a nie po klamrze, jest to czytelniejsze
           String cipher_name = args[1].toLowerCase();
           if (cipher_name.equals("ac")) {
             System.out.println(AtbashCipher(standard_input, method));
@@ -27,6 +28,25 @@ public class Enigma {
           String key = args[2].toLowerCase();
           if (cipher_name.equals("ctc")) {
             System.out.println(ColumnarTransposition(standard_input, method, key));
+          } 
+          else if (cipher_name.equals("cc")){
+            if (method.equals("e")){
+              out.println(CesarClassic.encrypt(standard_input, Integer.parseInt(key)));
+            }
+            else if (method.equals("d")){
+              out.println(CesarClassic.decrypt(standard_input,Integer.parseInt(key)));
+            }
+          }
+          else if (cipher_name.equals("cm")){
+            if (method.equals("e")){
+              out.println(CesarModern.encrypt(standard_input, Integer.parseInt(key)));
+            }
+            else if (method.equals("d")){
+              out.println(CesarModern.decrypt(standard_input,Integer.parseInt(key)));
+            }
+          }
+          else if (cipher_name.equals("rf")){
+            out.println("Wait for me, Honey. I'm comming soon!");
           }
         }
     } catch (IllegalArgumentException e) {
@@ -38,10 +58,15 @@ public class Enigma {
 
   public static void print_menu() {
     ArrayList<String> menu = new ArrayList<String>();
-    menu.add("AtbashCipher (AC)");
-    menu.add("ColumnarTranspositionCipher (CTC key)");
-    Integer index = 1;
+    menu.add(0,"AtbashCipher (AC)");
+    menu.add(1,"ColumnarTranspositionCipher (CTC key)");
+    menu.add(2, "Caesar classic (CC <number key>)");
+    menu.add(3, "Caesar modern (CM <number key>)");
+    menu.add(4, "Rail Fence (RF <number key>)");
+    
     for (String cipher : menu) {
+      Integer index = menu.indexOf(cipher) +1;
+
       System.out.println(index + ") " + cipher);
     }
   }
@@ -55,8 +80,8 @@ public class Enigma {
 
       if (method.equals("-e") | method.equals("-d")) {
         for (char character: text.toCharArray()) {
-          if (character == ' ') {
-            cipher += ' ';
+          if (!Character.isLetter(character)) {  //Paweł suggests:never compare char or Strings with "==" except you want to know if it is the same object, use obj.equals(obj); if (!Character.isLetter(character))... also for other non-letter signs ex. '?'' or '!' not only for space.
+            cipher += character;
           } else {
             int index = alphabet.indexOf(character);
             character = alphabet_reversed.charAt(index);
