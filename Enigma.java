@@ -1,60 +1,77 @@
 import java.util.*;
 import java.io.*;
+import java.util.List;
+import java.util.ArrayList;
+import java.util.Scanner;
 import static java.lang.System.out; // in order not to writ System all the time
 
 
-// write to console: method(-e or -d), cipher name (shortcuts), key (if required)
+// write to console: method(-e or -d), cipher name (shortcuts), key (if required), "<", fileName for input, [">", filName for output]
+// ex: -e cc 3 <messages > ciphers        /the result will be saved into file
+//ex: -d cm 4 <ciphers                   /the result will be printed to console.
 
 public class Enigma {
 
   public static void main(String[] args) {
-    String standard_input = "ABCDWKLMNXYZ abcdklmnwxyz";
+    List<String> toCipher = new ArrayList<String>();
+    Scanner inputStream = new Scanner(System.in);
+    while(inputStream.hasNextLine()){
+      String line = inputStream.nextLine();
+      String messageLine = line.replaceAll("\\n","");
+      toCipher.add(messageLine);
+      //inputStream.close();
+    }
+    //out.println("args.length: " + args.length); // for tests
+    //String message = "ABCDWKLMNXYZ abcdklmnwxyz !@#$%^&*()_+<>?/.,|\\ aa";
+    for(String message: toCipher ){
+      try {
+        int args_length = args.length;
+        String method = args[0].toLowerCase();
 
-    try {
-      int args_length = args.length;
-      String method = args[0].toLowerCase();
-
-      if (args_length == 1) {
-        if (method.equals("-l")) {
-          print_menu();
-        }
-      } else if (args_length == 2) {//sugeruję stawiać else w tej samej linii co if poniżej klamry zamykającej ifa a nie po klamrze, jest to czytelniejsze
+        if (args_length == 1) {
+          if (method.equals("-l")) {
+            print_menu();
+          }
+        } 
+        else if (args_length == 2) {
           String cipher_name = args[1].toLowerCase();
           if (cipher_name.equals("ac")) {
-            System.out.println(AtbashCipher(standard_input, method));
+            out.println(AtbashCipher(message, method));
           }
-      } else if (args_length == 3) {
+        } 
+        else if (args_length == 3) {
           String cipher_name = args[1].toLowerCase();
           String key = args[2].toLowerCase();
           if (cipher_name.equals("ctc")) {
-            System.out.println(ColumnarTransposition(standard_input, method, key));
+            out.println(ColumnarTransposition(message, method, key));
           } 
           else if (cipher_name.equals("cc")){
-            if (method.equals("e")){
-              out.println(CesarClassic.encrypt(standard_input, Integer.parseInt(key)));
+            if (method.equals("-e")){
+              out.println(CesarClassic.encrypt(message, Integer.parseInt(key)));
             }
-            else if (method.equals("d")){
-              out.println(CesarClassic.decrypt(standard_input,Integer.parseInt(key)));
-            }
+            else if (method.equals("-d")){
+              out.println(CesarClassic.decrypt(message,Integer.parseInt(key)));
+              }
           }
           else if (cipher_name.equals("cm")){
-            if (method.equals("e")){
-              out.println(CesarModern.encrypt(standard_input, Integer.parseInt(key)));
+            if (method.equals("-e")){
+              out.println(CesarModern.encrypt(message, Integer.parseInt(key)));
             }
-            else if (method.equals("d")){
-              out.println(CesarModern.decrypt(standard_input,Integer.parseInt(key)));
+            else if (method.equals("-d")){
+              out.println(CesarModern.decrypt(message,Integer.parseInt(key)));
             }
           }
           else if (cipher_name.equals("rf")){
             out.println("Wait for me, Honey. I'm comming soon!");
           }
         }
-    } catch (IllegalArgumentException e) {
-      System.out.println("Wrong arguments!");
-      e.printStackTrace();
+      }
+      catch (IllegalArgumentException | ArrayIndexOutOfBoundsException e) {
+        out.println("Wrong arguments! or leak of command line arguments");
+        e.printStackTrace();
+      }
     }
   }
-
 
   public static void print_menu() {
     ArrayList<String> menu = new ArrayList<String>();
@@ -67,7 +84,7 @@ public class Enigma {
     for (String cipher : menu) {
       Integer index = menu.indexOf(cipher) +1;
 
-      System.out.println(index + ") " + cipher);
+      out.println(index + ") " + cipher);
     }
   }
 
@@ -79,20 +96,19 @@ public class Enigma {
       String alphabet_reversed = "zyxwvutsrqponmlkjihgfedcba";
 
       if (method.equals("-e") | method.equals("-d")) {
-        for (char character: text.toCharArray()) {
-          if (!Character.isLetter(character)) {  //Paweł suggests:never compare char or Strings with "==" except you want to know if it is the same object, use obj.equals(obj); if (!Character.isLetter(character))... also for other non-letter signs ex. '?'' or '!' not only for space.
-            cipher += character;
-          } else {
-            int index = alphabet.indexOf(character);
-            character = alphabet_reversed.charAt(index);
+        for(int i=0; i< text.length(); i++){
+          if (!Character.isLetter(text.charAt(i))) {  //Paweł s
+            cipher += text.charAt(i);
+          } 
+          else {
+            int index = alphabet.indexOf(text.charAt(i));
+            char character = alphabet_reversed.charAt(index);
             cipher += character;
           }
         }
       }
       return cipher;
     }
-
-
 
   public static String ColumnarTransposition(String input, String method, String key) {
     //key - the word is to be shorter than the encrypted text, without repeating characters
@@ -105,7 +121,6 @@ public class Enigma {
     }
     return result;
   }
-
 
 
   public static String CT_Encipher(String text, String key, String pad) {
@@ -162,8 +177,6 @@ public class Enigma {
     }
     return encryption;
   }
-
-
 
   public static String CT_Decipher(String text, String key) {
     Integer text_len = text.length();
