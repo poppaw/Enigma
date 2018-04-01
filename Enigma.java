@@ -1,75 +1,117 @@
-import java.util.*;
-import java.io.*;
+import java.util.Arrays;
+import java.util.ArrayList;
+import java.util.InputMismatchException;
+import java.util.Scanner;
 
-
-// write to console: method(-e or -d), cipher name (shortcuts), key (if required)
 
 public class Enigma {
 
   public static void main(String[] args) {
-    String standard_input = "lrxholloxewd";
+    String text = getInput();
 
-    try {
-      int args_length = args.length;
-      String method = args[0].toLowerCase();
-
-      if (args_length == 1) {
-        if (method.equals("-l")) {
-          print_menu();
-        }
-      } else if (args_length == 2) {
-          String cipher_name = args[1].toLowerCase();
-          if (cipher_name.equals("ac")) {
-            System.out.println(AtbashCipher(standard_input, method));
-          }
-      } else if (args_length == 3) {
-          String cipher_name = args[1].toLowerCase();
-          String key = args[2].toLowerCase();
-          if (cipher_name.equals("ctc")) {
-            System.out.println(ColumnarTransposition(standard_input, method, key));
-          }
-        }
-    } catch (IllegalArgumentException e) {
-      System.out.println("Wrong arguments!");
-      e.printStackTrace();
+    if (isLetter(text)) {
+      try {
+        runAplication(text, args);
+      }
+      catch (ArrayIndexOutOfBoundsException ex) {
+        System.err.println("You have missed required arguments!");
+        printInstruction();
+      }
+    }
+    else {
+      throw new InputMismatchException("Wrong input! Input must be a string consisting of letters!");
     }
   }
 
 
-  public static void print_menu() {
+  public static void runAplication(String text, String[] args) {
+    text = text.toLowerCase();
+    String method = args[0].toLowerCase();
+
+    if (method.equals("-l")) {
+      printMenu();
+    }
+    else if (args[1].toLowerCase().equals("ac")) {
+        System.out.println(runAtbashCipher(text));
+    }
+    else if (args[1].toLowerCase().equals("ctc") && method.equals("-e") && isLetter(args[2])) {
+        System.out.println(runCtcEncipher(text, args[2]));
+    }
+    else if (args[1].toLowerCase().equals("ctc") && method.equals("-d") && isLetter(args[2])) {
+        System.out.println(runCtcDecipher(text, args[2]));
+    }
+    else {
+      throw new IllegalArgumentException ("Wrong arguments! Use -l option to see all available ciphers with instruction!");
+    }
+  }
+
+
+  public static boolean isLetter(String input) {
+    input = input.replaceAll("\\s+","");
+    char[] chars = input.toCharArray();
+    for (char character : chars) {
+        if(!Character.isLetter(character)) {
+            return false;
+        }
+    }
+    return true;
+  }
+
+
+  public static void printInstruction() {
+    System.err.println("INSTRUCTION:");
+    System.err.println("Atbash Cipher                  (write: -e|-d AC)");
+    System.err.println("Columnar Transposition Cipher  (write: -e|-d CTC key)");
+    System.err.println("The key for CTC must be a string with no repetitive characters");
+  }
+
+
+  public static String getInput() {
+    String input = "";
+    Scanner scanner = new Scanner(System.in);
+    ArrayList<String> lines = new ArrayList<String>();
+
+    while (scanner.hasNextLine()) {
+      String line = scanner.nextLine();
+      lines.add(line + " ");
+    }
+    for (String element : lines) {
+      input += element;
+    }
+    return input;
+  }
+
+
+  public static void printMenu() {
     ArrayList<String> menu = new ArrayList<String>();
-    menu.add("AtbashCipher (AC)");
-    menu.add("ColumnarTranspositionCipher (CTC key)");
+    menu.add("Atbash Cipher (write: -e|-d AC)");
+    menu.add("Columnar Transposition Cipher (write: -e|-d CTC key)");
     Integer index = 1;
     for (String cipher : menu) {
       System.out.println(index + ") " + cipher);
     }
+    System.out.println("The key for CTC must be a string with no repetitive characters");
   }
 
 
-  public static String AtbashCipher(String input, String method) {
-      String text = input.toLowerCase();
+  public static String runAtbashCipher(String text) {
       String cipher = "";
       String alphabet = "abcdefghijklmnopqrstuvwxyz";
       String alphabet_reversed = "zyxwvutsrqponmlkjihgfedcba";
 
-      if (method.equals("-e") | method.equals("-d")) {
-        for (char character: text.toCharArray()) {
-          if (character == ' ') {
-            cipher += ' ';
-          } else {
-            int index = alphabet.indexOf(character);
-            character = alphabet_reversed.charAt(index);
-            cipher += character;
-          }
+      for (char character : text.toCharArray()) {
+        if (character == ' ') {
+          cipher += ' ';
+        } else {
+          int index = alphabet.indexOf(character);
+          character = alphabet_reversed.charAt(index);
+          cipher += character;
         }
       }
       return cipher;
     }
 
-
-
-  public static String ColumnarTransposition(String input, String method, String key) {
+    public static String ColumnarTransposition(String input, String method, String key) {
     //key - the word is to be shorter than the encrypted text, without repeating characters
     String text = input.toLowerCase();
     String result = null;
@@ -137,7 +179,6 @@ public class Enigma {
     }
     return encryption;
   }
-
 
 
   public static String CT_Decipher(String text, String key) {
