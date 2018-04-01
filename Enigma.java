@@ -3,10 +3,10 @@ import java.io.*;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Scanner;
-import static java.lang.System.out; // in order not to writ System all the time
+import static java.lang.System.out; // in order not to write System.out. all the time
 
 
-// write to console: method(-e or -d), cipher name (shortcuts), key (if required), "<", fileName for input, [">", filName for output]
+// write to console: modus(-e or -d), cipher name (shortcuts), key (if required), "<", fileName for input, [">", filName for output]
 // ex: -e cc 3 <messages > ciphers        /the result will be saved into file
 //ex: -d cm 4 <ciphers                   /the result will be printed to console.
 
@@ -26,43 +26,48 @@ public class Enigma {
     for(String message: toCipher ){
       try {
         int args_length = args.length;
-        String method = args[0].toLowerCase();
+        String modus = args[0].toLowerCase();
 
         if (args_length == 1) {
-          if (method.equals("-l")) {
+          if (modus.equals("-l")) {
             print_menu();
           }
         } 
         else if (args_length == 2) {
           String cipher_name = args[1].toLowerCase();
           if (cipher_name.equals("ac")) {
-            out.println(AtbashCipher(message, method));
+            out.println(AtbashCipher(message, modus));
           }
         } 
         else if (args_length == 3) {
           String cipher_name = args[1].toLowerCase();
           String key = args[2].toLowerCase();
           if (cipher_name.equals("ctc")) {
-            out.println(ColumnarTransposition(message, method, key));
+            out.println(ColumnarTransposition(message, modus, key));
           } 
           else if (cipher_name.equals("cc")){
-            if (method.equals("-e")){
+            if (modus.equals("-e")){
               out.println(CesarClassic.encrypt(message, Integer.parseInt(key)));
             }
-            else if (method.equals("-d")){
+            else if (modus.equals("-d")){
               out.println(CesarClassic.decrypt(message,Integer.parseInt(key)));
               }
           }
           else if (cipher_name.equals("cm")){
-            if (method.equals("-e")){
+            if (modus.equals("-e")){
               out.println(CesarModern.encrypt(message, Integer.parseInt(key)));
             }
-            else if (method.equals("-d")){
+            else if (modus.equals("-d")){
               out.println(CesarModern.decrypt(message,Integer.parseInt(key)));
             }
           }
           else if (cipher_name.equals("rf")){
+            if (modus.equals("-e")){
+              out.println(RailFence.railEncrypt(message, Integer.parseInt(key)));
+            }
+            else if (modus.equals("-d")){
             out.println("Wait for me, Honey. I'm comming soon!");
+            }
           }
         }
       }
@@ -89,13 +94,13 @@ public class Enigma {
   }
 
 
-  public static String AtbashCipher(String input, String method) {
+  public static String AtbashCipher(String input, String modus) {
       String text = input.toLowerCase();
       String cipher = "";
       String alphabet = "abcdefghijklmnopqrstuvwxyz";
       String alphabet_reversed = "zyxwvutsrqponmlkjihgfedcba";
 
-      if (method.equals("-e") | method.equals("-d")) {
+      if (modus.equals("-e") | modus.equals("-d")) {
         for(int i=0; i< text.length(); i++){
           if (!Character.isLetter(text.charAt(i))) {  //Paweł s
             cipher += text.charAt(i);
@@ -110,13 +115,13 @@ public class Enigma {
       return cipher;
     }
 
-  public static String ColumnarTransposition(String input, String method, String key) {
+  public static String ColumnarTransposition(String input, String modus, String key) {
     //key - the word is to be shorter than the encrypted text, without repeating characters
     String text = input.toLowerCase();
     String result = null;
-    if (method.equals("-e")) {
+    if (modus.equals("-e")) {
       result =  CT_Encipher(text, key, "x");
-    } else if (method.equals("-d")) {
+    } else if (modus.equals("-d")) {
       result =  CT_Decipher(text, key);
     }
     return result;
