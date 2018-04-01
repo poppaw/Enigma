@@ -8,37 +8,30 @@ public class Enigma {
 
   public static void main(String[] args) {
     String text = getInput();
-
-    if (isLetter(text)) {
-      try {
-        runAplication(text, args);
-      }
-      catch (ArrayIndexOutOfBoundsException ex) {
-        System.err.println("You have missed required arguments!");
-        printInstruction();
-      }
+    try {
+      runAplication(text, args);
     }
-    else {
-      throw new InputMismatchException("Wrong input! Input must be a string consisting of letters!");
+    catch (ArrayIndexOutOfBoundsException ex) {
+      System.err.println("You have missed required arguments!");
+      printInstruction();
     }
   }
 
 
   public static void runAplication(String text, String[] args) {
-    text = text.toLowerCase();
     String method = args[0].toLowerCase();
 
     if (method.equals("-l")) {
       printMenu();
     }
     else if (args[1].toLowerCase().equals("ac")) {
-        System.out.println(runAtbashCipher(text));
+        System.out.println(AtbashCipher.runAtbashCipher(text));
     }
     else if (args[1].toLowerCase().equals("ctc") && method.equals("-e") && isLetter(args[2])) {
-        System.out.println(runCtcEncipher(text, args[2]));
+        System.out.println(CtcEncipher.runCtcEncipher(text, args[2]));
     }
     else if (args[1].toLowerCase().equals("ctc") && method.equals("-d") && isLetter(args[2])) {
-        System.out.println(runCtcDecipher(text, args[2]));
+        System.out.println(CtcDecipher.runCtcDecipher(text, args[2]));
     }
     else {
       throw new IllegalArgumentException ("Wrong arguments! Use -l option to see all available ciphers with instruction!");
@@ -92,11 +85,4 @@ public class Enigma {
     }
     System.out.println("The key for CTC must be a string with no repetitive characters");
   }
-
-
-
-
-
-
-
 }

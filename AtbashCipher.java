@@ -1,8 +1,17 @@
+import java.util.Arrays;
+import java.util.ArrayList;
+import java.util.InputMismatchException;
+
 public class AtbashCipher {
 
-
   public static void main(String[] args) {
-    runAtbashCipher(String text);
+    text = text.toLowerCase();
+    if (Enigma.isLetter(text)) {
+      runAtbashCipher(String text);
+    }
+    else {
+      throw new InputMismatchException("Wrong input! Input must be a string consisting of letters!");
+    }
   }
 
 
