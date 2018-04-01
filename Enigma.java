@@ -111,52 +111,67 @@ public class Enigma {
       return cipher;
     }
 
-    public static String ColumnarTransposition(String input, String method, String key) {
-    //key - the word is to be shorter than the encrypted text, without repeating characters
-    String text = input.toLowerCase();
-    String result = null;
-    if (method.equals("-e")) {
-      result =  CT_Encipher(text, key, "x");
-    } else if (method.equals("-d")) {
-      result =  CT_Decipher(text, key);
-    }
-    return result;
+
+  public static String runCtcEncipher(String text, String key) {
+    text = text.replaceAll("\\s+",""); //removes all whitespaces and non-visible characters
+    Integer text_len = text.length();
+    Integer key_len = key.length();
+    Integer pad_number = key_len - (text_len%key_len);//get the quantity of pads to use
+
+    text = addPadsToText(text, pad_number);
+    Integer len_padtext = text.length();//get the text length after adding pads
+    Integer rows_number = len_padtext/key_len;//get the number of rows to split the text
+    ArrayList<String> rows = splitTextToRows(text, rows_number, key_len);
+    char[] sorted_key = sortKey(key);
+    ArrayList<Integer> list_of_index = getIndexes(key, sorted_key);
+    ArrayList<String> sorted_rows = sortRows(rows, list_of_index);
+    String encryption = getEncryptedText(key_len, sorted_rows);
+    return encryption;
   }
 
 
-
-  public static String CT_Encipher(String text, String key, String pad) {
-    text = text.replaceAll("\\s+",""); //remove whitespaces
-    Integer text_len = text.length();
-    Integer key_len = key.length();
-
-    Integer pad_number = key_len - (text_len%key_len);//get the quantity of pads to use
+  public static String addPadsToText(String text, Integer pad_number) {
     for (int i=0; i<pad_number; i++) {
-      text += pad;//add pad do text
+      text += "x";
     }
-    Integer len_padtext = text.length();//get the text length after adding pads
-    Integer rows_number = len_padtext/key_len;//get the number of rows to split the text
+    return text;
+  }
+
+
+  public static ArrayList<String> splitTextToRows(String text, Integer rows_number, Integer key_len) {
     Integer start = 0;
     Integer end = key_len;
-    //split text to rows
-    List<String> rows = new ArrayList<String>();
+    ArrayList<String> rows = new ArrayList<String>();
     for (int i=0; i<rows_number; i++) {
       String row = text.substring(start,end);
       rows.add(row);
       start += key_len;
       end += key_len;
     }
+    return rows;
+  }
 
+
+  public static char[] sortKey(String key) {
     char[] sorted_key = key.toCharArray();
     Arrays.sort(sorted_key);
-    Integer index;
+    return sorted_key;
+  }
 
+
+  public static ArrayList<Integer> getIndexes(String string, char[] characters) {
     //use <key> and <sorted key> to find new indexes for row characters
-    List<Integer> list_of_index = new ArrayList<Integer>();
-    for (char character: sorted_key) {
-      index = key.indexOf(character);
+    ArrayList<Integer> list_of_index = new ArrayList<Integer>();
+    Integer index;
+    for (char character: characters) {
+      index = string.indexOf(character);
       list_of_index.add(index);
     }
+    return list_of_index;
+  }
+
+
+  public static ArrayList<String> sortRows(ArrayList<String> rows, ArrayList<Integer> list_of_index) {
     //use list_of_index to sort every row
     ArrayList<String> sorted_rows = new ArrayList<String>();
     for (String row : rows) {
@@ -166,11 +181,15 @@ public class Enigma {
       }
       sorted_rows.add(sorted_row);
     }
+    return sorted_rows;
+  }
 
+
+  public static String getEncryptedText(Integer key_len, ArrayList<String> sorted_rows) {
     //concatenate every row to get encrypted text
     //encrypted text takes indexed character from every row
     String encryption = "";
-    index = 0;
+    Integer index = 0;
     while (index < key_len) {
       for (String row : sorted_rows) {
         encryption += row.charAt(index);
@@ -181,27 +200,38 @@ public class Enigma {
   }
 
 
-  public static String CT_Decipher(String text, String key) {
+  public static String runCtcDecipher(String text, String key) {
     Integer text_len = text.length();
     Integer key_len = key.length();
     Integer row_len = text_len/key_len;
+    ArrayList<String> rows = getListOfRows(text, row_len, key_len);
+    ArrayList<String> reordered_rows = reorderEveryRow(row_len, rows);
+    char[] sorted_key = sortKey(key);
+    ArrayList<Integer> list_of_index = getIndexes(new String(sorted_key), key.toCharArray());
+    ArrayList<String> decrypted_rows = decryptEveryRow(reordered_rows, list_of_index);
+    String decryption = getDecryptedText(decrypted_rows);
+    return decryption;
+  }
 
-    //get a list of rows
+
+  public static ArrayList<String> getListOfRows(String text, Integer row_len, Integer key_len) {
     ArrayList<String> rows = new ArrayList<String>();
     Integer start = 0;
     Integer end = row_len;
-
     for (int i=0; i<key_len; i++) {
       rows.add(text.substring(start,end));
       start += row_len;
       end += row_len;
     }
+    return rows;
+  }
 
+
+  public static ArrayList<String> reorderEveryRow(Integer row_len, ArrayList<String> rows) {
     //reorder every row
     //take character at specific index of every row, concatenate them to string
-    Integer index;
     ArrayList<String> reordered_rows = new ArrayList<String>();
-    index = 0;
+    Integer index = 0;
     while (index < row_len) {
       String reordered_row = "";
       for (String row : rows) {
@@ -211,17 +241,11 @@ public class Enigma {
       //add string to list
       reordered_rows.add(reordered_row);
     }
+    return reordered_rows;
+  }
 
-    char[] sorted_key = key.toCharArray();
-    Arrays.sort(sorted_key);
-    //use <key> and <sorted key> to find new indexes for row characters
-    List<Integer> list_of_index = new ArrayList<Integer>();
-    for (char character: key.toCharArray()) {
-      index = new String(sorted_key).indexOf(character);
-      list_of_index.add(index);
-    }
 
-    //decrypt every reordered_row
+  public static ArrayList<String> decryptEveryRow(ArrayList<String> reordered_rows, ArrayList<Integer> list_of_index) {
     //take character at specific index of every row, concatenate them to string, add string to list
     ArrayList<String> decrypted_rows = new ArrayList<String>();
       for (String row : reordered_rows) {
@@ -231,7 +255,11 @@ public class Enigma {
         }
         decrypted_rows.add(decrypted_row);
       }
+      return decrypted_rows;
+    }
 
+
+  public static String getDecryptedText(ArrayList<String> decrypted_rows) {
     //concatenate every row to get encrypted text
     //encrypted text takes indexed character from every row
     String decryption = "";
@@ -239,5 +267,6 @@ public class Enigma {
       decryption += row;
     }
     return decryption;
-  }
+    }
+
 }
