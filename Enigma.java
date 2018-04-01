@@ -26,18 +26,24 @@ public class Enigma {
     }
     else if (args[1].toLowerCase().equals("ac")) {
       String text = getInput();
-      System.out.println(AtbashCipher.runAtbashCipher(text));
+      if (isLetter(text)) {
+        System.out.println(AtbashCipher.runAtbashCipher(text));
+      }
     }
     else if (args[1].toLowerCase().equals("ctc") && method.equals("-e") && isLetter(args[2])) {
       String text = getInput();
-      System.out.println(CtcEncipher.runCtcEncipher(text, args[2]));
+      if (isLetter(text)) {
+        System.out.println(CtcEncipher.runCtcEncipher(text, args[2]));
+      }
     }
     else if (args[1].toLowerCase().equals("ctc") && method.equals("-d") && isLetter(args[2])) {
       String text = getInput();
-      System.out.println(CtcDecipher.runCtcDecipher(text, args[2]));
+      if (isLetter(text)) {
+        System.out.println(CtcDecipher.runCtcDecipher(text, args[2]));
+      }
     }
     else {
-      throw new IllegalArgumentException ("Wrong arguments or input! Use -l option to see all available ciphers with the instruction!");
+      throw new IllegalArgumentException ("Wrong arguments! Use -l option to see all available ciphers with the instruction!");
     }
   }
 
