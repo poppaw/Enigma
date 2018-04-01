@@ -5,13 +5,7 @@ import java.util.InputMismatchException;
 public class CtcDecipher {
 
   public static void main(String[] args) {
-    text = text.toLowerCase();
-    if (Enigma.isLetter(text)) {
-      runCtcDecipher(String text, String key);
-    }
-    else {
-      throw new InputMismatchException("Wrong input! Input must be a string consisting of letters!");
-    }
+    System.out.println(runCtcDecipher("Ala ma kota", "pies"));
   }
 
 

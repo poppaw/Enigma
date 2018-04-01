@@ -9,7 +9,7 @@ public class Enigma {
   public static void main(String[] args) {
 
     try {
-      runAplication(text, args);
+      runAplication(args);
     }
     catch (ArrayIndexOutOfBoundsException ex) {
       System.err.println("You have missed required arguments!");
@@ -18,25 +18,32 @@ public class Enigma {
   }
 
 
-  public static void runAplication(String text, String[] args) {
+  public static void runAplication(String[] args) {
     String method = args[0].toLowerCase();
 
     if (method.equals("-l")) {
       printMenu();
     }
-
-    String text = getInput();
-    if (args[1].toLowerCase().equals("ac")) {
+    else if (args[1].toLowerCase().equals("ac")) {
+      String text = getInput();
+      if (isLetter(text)) {
         System.out.println(AtbashCipher.runAtbashCipher(text));
+      }
     }
     else if (args[1].toLowerCase().equals("ctc") && method.equals("-e") && isLetter(args[2])) {
+      String text = getInput();
+      if (isLetter(text)) {
         System.out.println(CtcEncipher.runCtcEncipher(text, args[2]));
+      }
     }
     else if (args[1].toLowerCase().equals("ctc") && method.equals("-d") && isLetter(args[2])) {
+      String text = getInput();
+      if (isLetter(text)) {
         System.out.println(CtcDecipher.runCtcDecipher(text, args[2]));
+      }
     }
     else {
-      throw new IllegalArgumentException ("Wrong arguments! Use -l option to see all available ciphers with instruction!");
+      throw new IllegalArgumentException ("Wrong arguments! Use -l option to see all available ciphers with the instruction!");
     }
   }
 
@@ -57,7 +64,8 @@ public class Enigma {
     System.err.println("INSTRUCTION:");
     System.err.println("Atbash Cipher                  (write: -e|-d AC)");
     System.err.println("Columnar Transposition Cipher  (write: -e|-d CTC key)");
-    System.err.println("The key for CTC must be a string with no repetitive characters");
+    System.err.println("Input for AC and CTC must be a string consisting of letters");
+    System.err.println("Key for CTC must be a string with no repetitive characters");
   }
 
 
@@ -85,6 +93,7 @@ public class Enigma {
     for (String cipher : menu) {
       System.out.println(index + ") " + cipher);
     }
-    System.out.println("The key for CTC must be a string with no repetitive characters");
+    System.out.println("Input for AC and CTC must be a string consisting of letters");
+    System.out.println("Key for CTC must be a string with no repetitive characters");
   }
 }

@@ -5,13 +5,7 @@ import java.util.InputMismatchException;
 public class AtbashCipher {
 
   public static void main(String[] args) {
-    text = text.toLowerCase();
-    if (Enigma.isLetter(text)) {
-      runAtbashCipher(String text);
-    }
-    else {
-      throw new InputMismatchException("Wrong input! Input must be a string consisting of letters!");
-    }
+    System.out.println(runAtbashCipher("Ala ma kota"));
   }
 
 
