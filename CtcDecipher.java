@@ -16,6 +16,7 @@ public class CtcDecipher {
 
 
   public static String runCtcDecipher(String text, String key) {
+    text = text.toLowerCase();
     Integer text_len = text.length();
     Integer key_len = key.length();
     Integer row_len = text_len/key_len;

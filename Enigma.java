@@ -7,7 +7,7 @@ import java.util.Scanner;
 public class Enigma {
 
   public static void main(String[] args) {
-    String text = getInput();
+
     try {
       runAplication(text, args);
     }
@@ -24,7 +24,9 @@ public class Enigma {
     if (method.equals("-l")) {
       printMenu();
     }
-    else if (args[1].toLowerCase().equals("ac")) {
+
+    String text = getInput();
+    if (args[1].toLowerCase().equals("ac")) {
         System.out.println(AtbashCipher.runAtbashCipher(text));
     }
     else if (args[1].toLowerCase().equals("ctc") && method.equals("-e") && isLetter(args[2])) {

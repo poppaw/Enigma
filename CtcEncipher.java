@@ -5,7 +5,6 @@ import java.util.InputMismatchException;
 public class CtcEncipher{
 
   public static void main(String[] args) {
-    text = text.toLowerCase();
     if (Enigma.isLetter(text)) {
       runCtcEncipher(String text, String key);
     }
@@ -16,6 +15,7 @@ public class CtcEncipher{
 
 
   public static String runCtcEncipher(String text, String key) {
+    text = text.toLowerCase();
     text = text.replaceAll("\\s+",""); //removes all whitespaces and non-visible characters
     Integer text_len = text.length();
     Integer key_len = key.length();

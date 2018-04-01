@@ -16,6 +16,7 @@ public class AtbashCipher {
 
 
   public static String runAtbashCipher(String text) {
+      text = text.toLowerCase();
       String cipher = "";
       String alphabet = "abcdefghijklmnopqrstuvwxyz";
       String alphabet_reversed = "zyxwvutsrqponmlkjihgfedcba";
