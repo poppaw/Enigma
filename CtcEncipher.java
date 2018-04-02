@@ -1,6 +1,8 @@
 import java.util.Arrays;
 import java.util.ArrayList;
 import java.util.InputMismatchException;
+import java.util.Set;
+import java.util.LinkedHashSet;
 
 public class CtcEncipher{
 
@@ -10,6 +12,7 @@ public class CtcEncipher{
 
 
   public static String runCtcEncipher(String text, String key) {
+    key = removeDuplicates(key);
     text = text.toLowerCase();
     text = text.replaceAll("\\s+",""); //removes all whitespaces and non-visible characters
     Integer text_len = text.length();
@@ -25,6 +28,22 @@ public class CtcEncipher{
     ArrayList<String> sorted_rows = sortRows(rows, list_of_index);
     String encryption = getEncryptedText(key_len, sorted_rows);
     return encryption;
+  }
+
+
+  public static String removeDuplicates(String key) {
+    char[] keyChars = key.toCharArray();
+    Set<Character> charSet = new LinkedHashSet<Character>();
+    for (char character : keyChars) {
+        charSet.add(character);
+    }
+
+    StringBuilder stringBuilder = new StringBuilder();
+    for (Character character : charSet) {
+        stringBuilder.append(character);
+    }
+    String keyNoDupl = stringBuilder.toString();
+    return keyNoDupl;
   }
 
 

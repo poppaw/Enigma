@@ -2,6 +2,8 @@ import java.util.Arrays;
 import java.util.ArrayList;
 import java.util.InputMismatchException;
 
+
+
 public class CtcDecipher {
 
   public static void main(String[] args) {
@@ -10,6 +12,7 @@ public class CtcDecipher {
 
 
   public static String runCtcDecipher(String text, String key) {
+    key = CtcEncipher.removeDuplicates(key);
     text = text.toLowerCase();
     Integer text_len = text.length();
     Integer key_len = key.length();
