@@ -23,50 +23,44 @@ public class Enigma {
 
 
   public static void runAplication(String[] args) {
-    // args[0] method,  args[1] cipher name,  args[2] key
+    // key key
     String method = args[0].toLowerCase();
-
     if (method.equals("-l")) {
       printMenu();
     }
-    else if (args[1].toLowerCase().equals("ac")) {
-      String text = getInput();
-      System.out.println(AtbashCipher.runAtbashCipher(text));
-    }
-
-    else if (args[1].toLowerCase().equals("ct") && method.equals("-e") && isLetter(args[2])) {
-      String text = getInput();
-      System.out.println(CtcEncipher.runCtcEncipher(text, args[2]));
-    }
-    else if (args[1].toLowerCase().equals("ct") && method.equals("-d") && isLetter(args[2])) {
-      String text = getInput();
-      System.out.println(CtcDecipher.runCtcDecipher(text, args[2]));
-    }
-
-    else if(args[1].toLowerCase().equals("re") && method.equals("-e")) {
-      String text = getInput();
-      System.out.println(RailFence.runRailEncrypt(text, Integer.parseInt(args[2])));
-    }
-
-    else if(args[1].toLowerCase().equals("cc") && method.equals("-e")) {
-      String text = getInput();
-      System.out.println(CesarClassic.runCesarEncrypt(text, Integer.parseInt(args[2])));
-    }
-    else if(args[1].toLowerCase().equals("cc") && method.equals("-d")) {
-      String text = getInput();
-      System.out.println(CesarClassic.runCesarDecrypt(text, Integer.parseInt(args[2])));
-    }
-
-    else if(args[1].toLowerCase().equals("cm") && method.equals("-e")) {
-      String text = getInput();
-      System.out.println(CesarModern.runCesarEncrypt(text, Integer.parseInt(args[2])));
-    }
-    else if(args[1].toLowerCase().equals("cm") && method.equals("-d")) {
-      String text = getInput();
-      System.out.println(CesarModern.runCesarDecrypt(text, Integer.parseInt(args[2])));
-    }
     else {
-      throw new IllegalArgumentException();
+      String text = getInput();
+      String cipher = args[1];
+      if (cipher.toLowerCase().equals("ac")) {
+        System.out.println(AtbashCipher.runAtbashCipher(text));
+      }
+      else {
+        String key = args[2];
+        if (cipher.toLowerCase().equals("ct") && method.equals("-e") && isLetter(key)) {
+          System.out.println(CtcEncipher.runCtcEncipher(text, key));
+        }
+        else if (cipher.toLowerCase().equals("ct") && method.equals("-d") && isLetter(key)) {
+          System.out.println(CtcDecipher.runCtcDecipher(text, key));
+        }
+        else if(cipher.toLowerCase().equals("re") && method.equals("-e")) {
+          System.out.println(RailFence.runRailEncrypt(text, Integer.parseInt(key)));
+        }
+        else if(cipher.toLowerCase().equals("cc") && method.equals("-e")) {
+          System.out.println(CesarClassic.runCesarEncrypt(text, Integer.parseInt(key)));
+        }
+        else if(cipher.toLowerCase().equals("cc") && method.equals("-d")) {
+          System.out.println(CesarClassic.runCesarDecrypt(text, Integer.parseInt(key)));
+        }
+        else if(cipher.toLowerCase().equals("cm") && method.equals("-e")) {
+          System.out.println(CesarModern.runCesarEncrypt(text, Integer.parseInt(key)));
+        }
+        else if(cipher.toLowerCase().equals("cm") && method.equals("-d")) {
+          System.out.println(CesarModern.runCesarDecrypt(text, Integer.parseInt(key)));
+        }
+        else {
+          throw new IllegalArgumentException();
+        }
+      }
     }
   }
 
