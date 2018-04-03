@@ -30,6 +30,11 @@ public class RailFence{
         return cipher;
     }
 
+    public static String railDecrypt(String text, int key){
+        String message = "Wymyśl mnie, lub szukaj na Google'u";
+        return (message);
+    }
+
     public static void main(String[] args) {
         String text = new String("Hello World!");
         int key = 3;
