@@ -30,31 +30,31 @@ public class Enigma {
     }
     else {
       String text = getInput();
-      String cipher = args[1];
+      String cipher = args[1].toLowerCase();
       if (cipher.toLowerCase().equals("ac")) {
         System.out.println(AtbashCipher.runAtbashCipher(text));
       }
       else {
-        String key = args[2];
-        if (cipher.toLowerCase().equals("ct") && method.equals("-e") && isLetter(key)) {
+        String key = args[2].toLowerCase();
+        if (cipher.equals("ct") && method.equals("-e") && isLetter(key)) {
           System.out.println(CtcEncipher.runCtcEncipher(text, key));
         }
-        else if (cipher.toLowerCase().equals("ct") && method.equals("-d") && isLetter(key)) {
+        else if (cipher.equals("ct") && method.equals("-d") && isLetter(key)) {
           System.out.println(CtcDecipher.runCtcDecipher(text, key));
         }
-        else if(cipher.toLowerCase().equals("re") && method.equals("-e")) {
+        else if(cipher.equals("re") && method.equals("-e")) {
           System.out.println(RailFence.runRailEncrypt(text, Integer.parseInt(key)));
         }
-        else if(cipher.toLowerCase().equals("cc") && method.equals("-e")) {
+        else if(cipher.equals("cc") && method.equals("-e")) {
           System.out.println(CesarClassic.runCesarEncrypt(text, Integer.parseInt(key)));
         }
-        else if(cipher.toLowerCase().equals("cc") && method.equals("-d")) {
+        else if(cipher.equals("cc") && method.equals("-d")) {
           System.out.println(CesarClassic.runCesarDecrypt(text, Integer.parseInt(key)));
         }
-        else if(cipher.toLowerCase().equals("cm") && method.equals("-e")) {
+        else if(cipher.equals("cm") && method.equals("-e")) {
           System.out.println(CesarModern.runCesarEncrypt(text, Integer.parseInt(key)));
         }
-        else if(cipher.toLowerCase().equals("cm") && method.equals("-d")) {
+        else if(cipher.equals("cm") && method.equals("-d")) {
           System.out.println(CesarModern.runCesarDecrypt(text, Integer.parseInt(key)));
         }
         else {
