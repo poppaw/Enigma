@@ -23,7 +23,7 @@ public class Encrypt {
         else if (cipher.equals("ctc"))
             result = CtcEncipher.runCtcEncipher(text, key);
         else if (cipher.equals("rf"))
-            result = RailFence.railDecrypt(text, Integer.parseInt(key));
+            result = RailFence.railEncrypt(text, Integer.parseInt(key));
         else
             result = "Something wrong whith your cipher identfiers"; // or throw IllegalArgument exc.
         return result;       
