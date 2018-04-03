@@ -1,6 +1,6 @@
 public class CesarClassic{
-    
-    public static String encrypt(String text, int shift){
+
+    public static String runCesarEncrypt(String text, int shift){
         char sign;
         char newSign;
         String encrypted = "";
@@ -16,7 +16,7 @@ public class CesarClassic{
         }
         return encrypted;
     }
-    public static String decrypt(String text, int shift){
+    public static String runCesarDecrypt(String text, int shift){
         char sign;
         char newSign;
         String decrypted = "";
@@ -32,18 +32,18 @@ public class CesarClassic{
         }
         return decrypted;
     }
-        
+
 
     public static void main(String[] args) {
-        String text = "ABCDEFGHIJKLMNOPQRSTUVWXYZ abcdefghijklmnopqrstuvwxyz !@#$%^&";   
+        String text = "ABCDEFGHIJKLMNOPQRSTUVWXYZ abcdefghijklmnopqrstuvwxyz !@#$%^&";
         int shift = 8;
-        String encrypted = encrypt(text,shift);
+        String encrypted = runCesarEncrypt(text,shift);
         System.out.println(encrypted);
-        String decrypted = decrypt(encrypted, shift);
+        String decrypted = runCesarDecrypt(encrypted, shift);
         System.out.println(decrypted);
         boolean accurate = decrypted.equals(text);
         System.out.println("decrypted = text before encryption: " + accurate);
 
-        
+
     }
 }

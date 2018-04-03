@@ -1,6 +1,6 @@
 public class CesarModern{
 
-    static String encrypt(String text, int shift) {
+    static String runCesarEncrypt(String text, int shift) {
         char sign;
         char newSign;
         String encrypted = "";
@@ -10,28 +10,28 @@ public class CesarModern{
             newSign = (char)(sign + shift);
             encrypted += newSign;
         }
-        return encrypted;     
+        return encrypted;
     }
 
-    static String decrypt(String text, int shift) {
+    static String runCesarDecrypt(String text, int shift) {
         char sign;
         char newSign;
-        String decrypted = ""; 
+        String decrypted = "";
 
         for(int i=0; i< text.length(); i++){
             sign = text.charAt(i);
-            newSign = (char)(sign - shift); 
+            newSign = (char)(sign - shift);
             decrypted += newSign;
         }
         return decrypted;
     }
 
     public static void main(String[] args) {
-        String text = "Bociany na Ekrany!";   
+        String text = "Bociany na Ekrany!";
         int shift = 8;
         String crypt = "Jwkqiv(vi(Msziv)";
-        System.out.println(encrypt(text, shift));
-        System.out.println(decrypt(crypt, shift));
-    
+        System.out.println(runCesarEncrypt(text, shift));
+        System.out.println(runCesarDecrypt(crypt, shift));
+
     }
 }

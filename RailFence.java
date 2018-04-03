@@ -3,8 +3,8 @@ import java.util.ArrayList;
 import static java.lang.System.out;
 
 public class RailFence{
-    
-    public static String railEncrypt(String text, int key){
+
+    public static String runRailEncrypt(String text, int key){
         List <char[]> rail = new ArrayList<char[]>();
         //create  empty arrays nested in list
         for(int i=0; i <key;i++) rail.add(new char[text.length()]);
@@ -33,6 +33,6 @@ public class RailFence{
     public static void main(String[] args) {
         String text = new String("Hello World!");
         int key = 3;
-        out.println(railEncrypt(text,key));
+        out.println(runRailEncrypt(text,key));
     }
-}               
+}
