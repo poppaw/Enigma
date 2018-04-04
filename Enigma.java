@@ -45,6 +45,9 @@ public class Enigma {
         else if(cipher.equals("rf") && method.equals("-e")) {
           System.out.println(RailFence.runRailEncrypt(text, Integer.parseInt(key)));
         }
+        else if(cipher.equals("rf") && method.equals("-d")) {
+          System.out.println(RailFence.runRailDecrypt(text, Integer.parseInt(key)));
+        }
         else if(cipher.equals("cc") && method.equals("-e")) {
           System.out.println(CesarClassic.runCesarEncrypt(text, Integer.parseInt(key)));
         }
@@ -114,9 +117,9 @@ public class Enigma {
     menu.add("Rail Fence               (write: -e|-d RF key)");
     menu.add("Cesar Classic            (write: -e|-d CC key)");
     menu.add("Cesar Modern             (write: -e|-d CM key)");
-    Integer index = 1;
     for (String cipher : menu) {
-      System.out.println(index + ") " + cipher);
+      Integer index = menu.indexOf(cipher) +1;
+      System.out.println("\t" + index + ") " + cipher);
     }
   }
 }
