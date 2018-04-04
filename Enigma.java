@@ -9,7 +9,7 @@ public class Enigma {
   public static void main(String[] args) {
 
     try {
-      runAplication(args);
+      runApplication(args);
     }
     catch (ArrayIndexOutOfBoundsException ex) {
       System.err.println("You have missed required arguments!");
@@ -22,7 +22,7 @@ public class Enigma {
   }
 
 
-  public static void runAplication(String[] args) {
+  public static void runApplication(String[] args) {
     // key key
     String method = args[0].toLowerCase();
     if (method.equals("-l")) {
