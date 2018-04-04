@@ -43,7 +43,7 @@ public class Enigma {
       System.out.println(CtcDecipher.runCtcDecipher(text, args[2]));
     }
 
-    else if(args[1].toLowerCase().equals("re") && method.equals("-e")) {
+    else if(args[1].toLowerCase().equals("rf") && method.equals("-e")) {
       String text = getInput();
       System.out.println(RailFence.runRailEncrypt(text, Integer.parseInt(args[2])));
     }
