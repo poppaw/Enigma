@@ -4,7 +4,28 @@ import static java.lang.System.out;
 
 public class RailFence{
     
+    static String textAdapter(String text){
+        if (text.length() <= 2){     // if text is to short
+            StringBuilder sb = new StringBuilder();
+            String redundant = "Xxx";
+            sb.append(redundant);
+            sb.append(text);
+            sb.append(redundant);
+            text = sb.toString();
+        }
+        return text;
+    }
+
+    static int keyModifier(String text, int key){ 
+        if (key < 2 || key > text.length()/2)
+            key = 3;
+        return key;
+    }
+     
     public static String railEncrypt(String text, int key){
+        text = textAdapter(text);
+        key = keyModifier(text, key);
+        
         List <char[]> rail = new ArrayList<char[]>();
         //create  empty arrays nested in list
         for(int i=0; i <key;i++) rail.add(new char[text.length()]);
@@ -36,8 +57,9 @@ public class RailFence{
     }
 
     public static void main(String[] args) {
-        String text = new String("Hello World!");
-        int key = 3;
-        out.println(railEncrypt(text,key));
+        String text = new String("Ha");
+        int key = 1;
+        System.out.println(railEncrypt(text, key));
+        //railEncrypt(text, key);
     }
 }               
