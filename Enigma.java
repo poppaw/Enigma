@@ -42,7 +42,7 @@ public class Enigma {
         else if (cipher.equals("ct") && method.equals("-d") && isLetter(key)) {
           System.out.println(CtcDecipher.runCtcDecipher(text, key));
         }
-        else if(cipher.equals("re") && method.equals("-e")) {
+        else if(cipher.equals("rf") && method.equals("-e")) {
           System.out.println(RailFence.runRailEncrypt(text, Integer.parseInt(key)));
         }
         else if(cipher.equals("cc") && method.equals("-e")) {
@@ -120,3 +120,4 @@ public class Enigma {
     }
   }
 }
+
