@@ -7,15 +7,16 @@ public class CesarClassic{
         for(int i=0; i< text.length(); i++){
             sign = text.charAt(i);
             if (!Character.isLetter(sign)) newSign = sign; //(sign == ' ')
-            else if (Character.isUpperCase(sign) && (sign + shift > 'Z')) newSign = (char) (sign+shift - 26);
+            else if (Character.isUpperCase(sign) && (sign + shift > 'Z')) newSign = (char) (sign + shift - 26);
             else if (Character.isUpperCase(sign) && (sign + shift < 'A')) newSign = (char) (sign + shift + 26);
-            else if (Character.isLowerCase(sign) && (sign + shift > 'z')) newSign = (char) (sign+shift - 26);
+            else if (Character.isLowerCase(sign) && (sign + shift > 'z')) newSign = (char) (sign + shift - 26);
             else if (Character.isLowerCase(sign) && (sign + shift < 'a')) newSign = (char) (sign + shift + 26);
             else newSign = (char)(sign + shift);
             encrypted += newSign;
         }
         return encrypted;
     }
+    
     public static String runCesarDecrypt(String text, int shift){
         char sign;
         char newSign;

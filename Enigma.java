@@ -7,7 +7,6 @@ import java.util.Scanner;
 public class Enigma {
 
   public static void main(String[] args) {
-
     try {
       runApplication(args);
     }
@@ -23,15 +22,14 @@ public class Enigma {
 
 
   public static void runApplication(String[] args) {
-    // key key
     String method = args[0].toLowerCase();
     if (method.equals("-l")) {
       printMenu();
     }
     else {
-      String text = getInput();
       String cipher = args[1].toLowerCase();
-      if (cipher.toLowerCase().equals("ac")) {
+      String text = getInput();
+      if (cipher.toLowerCase().equals("a")) {
         System.out.println(AtbashCipher.runAtbashCipher(text));
       }
       else {
@@ -41,9 +39,6 @@ public class Enigma {
         }
         else if (cipher.equals("ct") && method.equals("-d") && isLetter(key)) {
           System.out.println(CtcDecipher.runCtcDecipher(text, key));
-        }
-        else if(cipher.equals("rf") && method.equals("-e")) {
-          System.out.println(RailFence.runRailEncrypt(text, Integer.parseInt(key)));
         }
         else if(cipher.equals("cc") && method.equals("-e")) {
           System.out.println(CesarClassic.runCesarEncrypt(text, Integer.parseInt(key)));
@@ -81,13 +76,11 @@ public class Enigma {
     System.err.println("INSTRUCTION:");
     System.err.println("Atbash                   (write: -e|-d A)");
     System.err.println("Columnar Transposition   (write: -e|-d CT key)");
-    System.err.println("Columnar Transposition   (write: -e|-d CT key)");
-    System.err.println("Rail Fence               (write: -e|-d RF key)");
     System.err.println("Cesar Classic            (write: -e|-d CC key)");
     System.err.println("Cesar Modern             (write: -e|-d CM key)");
     System.err.println("Input for A and CT must be a string consisting of letters");
     System.err.println("Key for CT must be a string with no repetitive characters");
-    System.err.println("Key for RF, CC and CM must be a number");
+    System.err.println("Key for CC and CM must be a number");
   }
 
 
@@ -98,7 +91,7 @@ public class Enigma {
 
     while (scanner.hasNextLine()) {
       String line = scanner.nextLine();
-      lines.add(line + " ");
+      lines.add(line.replaceAll("\\n",""));
     }
     for (String element : lines) {
       input += element;
@@ -111,13 +104,12 @@ public class Enigma {
     ArrayList<String> menu = new ArrayList<String>();
     menu.add("Atbash                   (write: -e|-d A)");
     menu.add("Columnar Transposition   (write: -e|-d CT key)");
-    menu.add("Rail Fence               (write: -e|-d RF key)");
     menu.add("Cesar Classic            (write: -e|-d CC key)");
     menu.add("Cesar Modern             (write: -e|-d CM key)");
     Integer index = 1;
     for (String cipher : menu) {
       System.out.println(index + ") " + cipher);
+      index += 1;
     }
   }
 }
-
