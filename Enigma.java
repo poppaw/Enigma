@@ -106,7 +106,7 @@ public class Enigma {
     menu.add("Columnar Transposition   (write: -e|-d CT key)");
     menu.add("Cesar Classic            (write: -e|-d CC key)");
     menu.add("Cesar Modern             (write: -e|-d CM key)");
-    Integer index = 1;
+    int index = 1;
     for (String cipher : menu) {
       System.out.println(index + ") " + cipher);
       index += 1;
