@@ -1,6 +1,6 @@
 public class CesarModern{
 
-    static String encrypt(String text, int shift) {
+    public static String encrypt(String text, int shift) {
         char sign;
         char newSign;
         String encrypted = "";
@@ -13,7 +13,7 @@ public class CesarModern{
         return encrypted;     
     }
 
-    static String decrypt(String text, int shift) {
+    public static String decrypt(String text, int shift) {
         char sign;
         char newSign;
         String decrypted = ""; 
@@ -26,6 +26,7 @@ public class CesarModern{
         return decrypted;
     }
 
+    
     public static void main(String[] args) {
         String text = "Bociany na Ekrany!";   
         int shift = 8;
