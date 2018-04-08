@@ -16,7 +16,7 @@ public class AtbashCipher {
       String alphabet_reversed = "zyxwvutsrqponmlkjihgfedcba";
 
        for(int i=0; i< text.length(); i++){
-         if (!Character.isLetter(text.charAt(i)))  // Paweł manipulated
+         if (!Character.isLetter(text.charAt(i)))  // ignors non-alpha chars;
            cipher += text.charAt(i);
          else{
            int index = alphabet.indexOf(text.charAt(i));

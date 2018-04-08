@@ -1,5 +1,6 @@
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Arrays;
 import java.util.Scanner;
 import static java.lang.System.out;
 
@@ -13,21 +14,29 @@ public class EnigmaMachine{
         menu.add(3, "Caesar modern: "+ "-e/-d  cm  <number key>  <stdInput>");
         menu.add(4, "Rail Fence: "+ "-e/-d  rf  <number key>  <stdInput>");
         
-        out.println("\nTo choose modus and cipher use proper format of input:\n");
+        out.println("\nTo choose modus and kind of cipher use the proper format of input:\n");
         for (String cipher : menu) {
           Integer index = menu.indexOf(cipher) +1;
           out.println("\t" + index + ") " + cipher);
         }
         out.println("\n\t-e means \"encipher\", -d means \"decipher\",-l is for displaying menu");
-    
     }
     
-    public static void incorrectParamethers(){
-        out.println("\nBe aware of number or type of your input arguments: 1 modus, 2 cipher, [optional] 3 key:\n \t\t - alpha-with-no-repetitions-key for CTC, number-key for CC, CM and RF, no key for AC");
+    public static void incorrectParamethers(String[] args){
+        out.println("Be aware of number or type of your input arguments: "+
+        "[1] modus (-e /-d), [2] cipher (ac/ctc/cc/cm/rf), [optional 3] key:\n \t\t - alpha-with-no-repetitions-key for CTC, "+
+        "number-key for CC, CM and RF, no key for AC.");
+        out.print("Your arguments: ");
+        for (String arg:args)
+            out.print(String.format("[%d]%s ",Arrays.asList(args).indexOf(arg) +1, arg));
+        out.println("\nNumber of your arguments: " + args.length);
         print_menu();
     }
-    static List<String> getInput(){
-        List<String> toCipher = new ArrayList<String>();
+
+    public static List<String> getInput(){
+        /*Each line of standard input collected in list of strings
+        */
+        List<String> toCipher = new ArrayList<>();
         Scanner inputStream = new Scanner(System.in);
         while(inputStream.hasNextLine()){
             String line = inputStream.nextLine();
@@ -51,7 +60,7 @@ public class EnigmaMachine{
                         out.println(AtbashCipher.runAtbashCipher(message));
                 }
                 else if(args.length >2){
-                    String key = args[2].toLowerCase(); //establish args[2] as key
+                    String key = args[2].toLowerCase(); //establish args[2] as the key
                     if (modus.equals("-e")){
                         for(String message: getInput()) 
                             out.println(Encrypt.choose(cipher, key, message));
@@ -60,17 +69,24 @@ public class EnigmaMachine{
                         for(String message: getInput()) 
                             out.println(Decrypt.choose(cipher, key, message));
                     }
-                    else incorrectParamethers();
+                    else incorrectParamethers(args);
                 }
-                else incorrectParamethers();
+                else incorrectParamethers(args);
             }
-            else incorrectParamethers();
+            else incorrectParamethers(args);
         }
-        catch(ArrayIndexOutOfBoundsException | IllegalArgumentException e){
-            out.println("number of your arguments: " + args.length); //ogarnąć format
+        catch(IndexOutOfBoundsException e){
+            out.println("Except: " + e.getMessage());
+            incorrectParamethers(args);
+        }
+        //catch(NumberFormatException e){
+          //  out.println(e);
+        //}  
+        catch(IllegalArgumentException e){
+             //ogarnąć format
             out.println("Except: " + e.getMessage()); // prints only message without StackTrace
-            //e.printStackTrace();
-            incorrectParamethers();
+            //instead of e.printStackTrace();
+            incorrectParamethers(args);
         }           
     }
 }
