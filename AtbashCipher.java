@@ -15,15 +15,15 @@ public class AtbashCipher {
       String alphabet = "abcdefghijklmnopqrstuvwxyz";
       String alphabet_reversed = "zyxwvutsrqponmlkjihgfedcba";
 
-      for (char character : text.toCharArray()) {
-        if (character == ' ') {
-          cipher += ' ';
-        } else {
-          int index = alphabet.indexOf(character);
-          character = alphabet_reversed.charAt(index);
-          cipher += character;
-        }
-      }
-      return cipher;
+       for(int i=0; i< text.length(); i++){
+         if (!Character.isLetter(text.charAt(i)))  // ignors non-alpha chars;
+           cipher += text.charAt(i);
+         else{
+           int index = alphabet.indexOf(text.charAt(i));
+           char character = alphabet_reversed.charAt(index);
+           cipher += character;
+         }
+       }
+     return cipher;
     }
 }
