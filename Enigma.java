@@ -41,16 +41,22 @@ public class Enigma {
           System.out.println(CtcDecipher.runCtcDecipher(text, key));
         }
         else if(cipher.equals("cc") && method.equals("-e")) {
-          System.out.println(CesarClassic.runCesarEncrypt(text, Integer.parseInt(key)));
+          System.out.println(CesarClassic.encrypt(text, Integer.parseInt(key)));
         }
         else if(cipher.equals("cc") && method.equals("-d")) {
-          System.out.println(CesarClassic.runCesarDecrypt(text, Integer.parseInt(key)));
+          System.out.println(CesarClassic.decrypt(text, Integer.parseInt(key)));
         }
         else if(cipher.equals("cm") && method.equals("-e")) {
-          System.out.println(CesarModern.runCesarEncrypt(text, Integer.parseInt(key)));
+          System.out.println(CesarModern.encrypt(text, Integer.parseInt(key)));
         }
         else if(cipher.equals("cm") && method.equals("-d")) {
-          System.out.println(CesarModern.runCesarDecrypt(text, Integer.parseInt(key)));
+          System.out.println(CesarModern.decrypt(text, Integer.parseInt(key)));
+        }
+        else if(cipher.equals("rf") && method.equals("-e")) {
+          System.out.println(RailFence.railEncrypt(text, Integer.parseInt(key)));
+        }
+        else if(cipher.equals("rf") && method.equals("-d")) {
+          System.out.println(RailFence.railDecrypt(text, Integer.parseInt(key)));
         }
         else {
           throw new IllegalArgumentException();
@@ -78,9 +84,10 @@ public class Enigma {
     System.err.println("Columnar Transposition   (write: -e|-d CT key)");
     System.err.println("Cesar Classic            (write: -e|-d CC key)");
     System.err.println("Cesar Modern             (write: -e|-d CM key)");
+    System.err.println("Rail Fence               (write: -e|-d RF key)");
     System.err.println("Input for A and CT must be a string consisting of letters");
     System.err.println("Key for CT must be a string with no repetitive characters");
-    System.err.println("Key for CC and CM must be a number");
+    System.err.println("Key for CC, CM and RF must be a number");
   }
 
 
