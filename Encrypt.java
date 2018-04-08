@@ -1,17 +1,6 @@
 
 public class Encrypt {
-    public static void main(String[] args)  {
-        try{
-            System.out.println("cc "+ choose("cc", "p", "AaMmZz"));
-        }
-        catch (NumberFormatException e) {
-            System.out.println(e);
-        }
-        catch(IllegalArgumentException e){
-            System.out.println(incorrectParamethers()); // testing of calling method
-        }      
-    }
-
+    
     public static String incorrectParamethers(){
         return "Be aware of type key: "+
                 "alpha with no repetitions-key for CTC, "+
@@ -36,7 +25,20 @@ public class Encrypt {
             result = RailFence.railEncrypt(text, Integer.parseInt(key));
         else
             throw new NumberFormatException("Something wrong whith your cipher identfiers");
-            //result = "Something wrong whith your cipher identfiers"; // or throw IllegalArgument exc.
+    
         return result;       
+    }
+
+    // for testing:
+    public static void main(String[] args)  {
+        try{
+            System.out.println("cc "+ choose("cc", "p", "AaMmZz"));
+        }
+        catch (NumberFormatException e) {
+            System.out.println(e);
+        }
+        catch(IllegalArgumentException e){
+            System.out.println(incorrectParamethers()); // testing of calling method
+        }      
     }
 }
