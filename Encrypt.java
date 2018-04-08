@@ -7,7 +7,18 @@ public class Encrypt {
                 "number-key for CC, CM and RF";
     }
 
-    public static String choose (String cipher, String key, String text) throws NumberFormatException{
+    public static boolean isLetter(String input) {
+        input = input.replaceAll("\\s+","");
+        char[] chars = input.toCharArray();
+        for (char character : chars) {
+            if(!Character.isLetter(character)) {
+                return false;
+            }
+        }
+        return true;
+      }
+
+    public static String choose (String cipher, String key, String text) throws IllegalArgumentException{
         String result = new String();
         if (cipher.equals("cc")){
             try{
@@ -19,12 +30,12 @@ public class Encrypt {
         }
         else if (cipher.equals("cm"))
             result = CesarModern.encrypt(text, Integer.parseInt(key));
-        else if (cipher.equals("ctc"))
+        else if (cipher.equals("ctc")&& isLetter(key))
             result = CtcEncipher.runCtcEncipher(text, key);
         else if (cipher.equals("rf"))
             result = RailFence.railEncrypt(text, Integer.parseInt(key));
         else
-            throw new NumberFormatException("Something wrong whith your cipher identfiers");
+            throw new IllegalArgumentException("Something wrong whith your cipher identfiers");
     
         return result;       
     }
