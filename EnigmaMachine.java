@@ -79,9 +79,6 @@ public class EnigmaMachine{
             out.println("Except: " + e.getMessage());
             incorrectParamethers(args);
         }
-        //catch(NumberFormatException e){
-          //  out.println(e);
-        //}  
         catch(IllegalArgumentException e){
              //ogarnąć format
             out.println("Except: " + e.getMessage()); // prints only message without StackTrace
